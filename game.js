@@ -46,3 +46,32 @@ function playRound(playerSelection, computerSelection) {
 
     return result
   }
+
+  function game() {
+
+    let playerWins = 0
+    let computerWins = 0
+
+    // plays 5 rounds
+    for (let i = 0; i < 5; i++) {
+        let playerChoice = prompt("Rock, paper, scissors?")
+        let result = playRound(playerChoice, getComputerChoice())
+        console.log(result)
+
+        if (result.charAt(4) === "W") {
+            playerWins++
+        } else if (result.charAt(4) === "L") {
+            computerWins++
+        }
+    }
+
+    if (playerWins > computerWins) {
+        console.log("Final Winner: YOU!")
+    } else if (computerWins > playerWins) {
+        console.log("Final Winner: The Computer!")
+    } else {
+        console.log("Final Result: A draw!")
+    }
+  }
+
+  game()
