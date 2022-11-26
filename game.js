@@ -1,75 +1,83 @@
 function getComputerChoice() {
-    // returns 0, 1 or 2
     let randomNumber = Math.floor(Math.random() * 3)
     
     switch (randomNumber) {
         case 0:
-            return "Rock"
+            return "rock"
         case 1:
-            return "Paper"
+            return "paper"
         default:
-            return "Scissors"
+            return "scissors"
     }
 }
 
+let gameOver = false
 let playerScore = 0
 let computerScore = 0
+let finalResult
 
 function playRound(playerSelection, computerSelection) {
+    let winner = getWinner(playerSelection, computerSelection)
+    updateScore(winner, playerSelection, computerSelection)
+}
+
+function getWinner(playerSelection, computerSelection) {
     playerSelection = playerSelection.toUpperCase()
     computerSelection = computerSelection.toUpperCase()
 
-    let result
+    let winner = ""
 
     if (playerSelection === "ROCK") {
         if (computerSelection === "PAPER") {
-            result = "You Lose! Paper beats Rock"
-            computerScore++
+            winner = "computer"
         } else if (computerSelection === "SCISSORS") {
-            result = "You Win! Rock beats Scissors"
-            playerScore++
-        } else {
-            result = "It's draw!"
+            winner = "player"
         }
     } else if (playerSelection === "PAPER") {
         if (computerSelection === "SCISSORS") {
-            result = "You Lose! Scissors beats Paper"
-            computerScore++
+            winner = "computer"
         } else if (computerSelection === "ROCK") {
-            result = "You Win! Paper beats Rock"
-            playerScore++
-        } else {
-            result = "It's draw!"
+            winner = "player"
         }
     } else {
         if (computerSelection === "ROCK") {
-            result = "You Lose! Rock beats Scissors"
-            computerScore++
+            winner = "computer"
         } else if (computerSelection === "PAPER") {
-            result = "You Win! Scissors beats Paper"
-            playerScore++
-        } else {
-            result = "It's draw!"
+            winner = "player"
         }
     }
+    return winner
+}
 
-    let finalResult
-
-    if (playerScore === 5) {
-        finalResult = "Final Winner: YOU!"
-    } else if (computerScore === 5) {
-        finalResult = "Final Winner: The Computer!"
+function updateScore(winner, playerSelection, computerSelection) {
+    if (winner === "computer") {
+        result = "you lose! " + computerSelection + " beats " + playerSelection
+        computerScore++
+    } else if (winner === "player") {
+        result = "you win! " + playerSelection + " beats " + computerSelection
+        playerScore++
+    } else {
+        result = "it's a draw!"
     }
 
-    updateScore(result, finalResult, playerScore, computerScore)
+    if (playerScore === 5) {
+        finalResult = "FINAL WINNER: YOU!"
+        gameOver = true
+    } else if (computerScore === 5) {
+        finalResult = "FINAL WINNER: THE COMPUTER!"
+        gameOver = true
+    }
 
-  }
+    updatePage(result, finalResult, playerScore, computerScore)
+}
 
 const buttons = document.querySelectorAll('button')
 
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        playRound(button.id, getComputerChoice())
+        if (!gameOver) {
+            playRound(button.id, getComputerChoice())
+        }
     })
 })
 
@@ -84,43 +92,9 @@ container.appendChild(playerCurrentScore)
 container.appendChild(computerCurrentScore)
 container.appendChild(finalResultString)
 
-function updateScore(result, finalResult, playerScore, computerScore) {
+function updatePage(result, finalResult, playerScore, computerScore) {
     content.textContent = result
-    playerCurrentScore.textContent = `Your score: ${playerScore}`
-    computerCurrentScore.textContent = `Computer's score: ${computerScore}`
+    playerCurrentScore.textContent = `your score: ${playerScore}`
+    computerCurrentScore.textContent = `computer's score: ${computerScore}`
     finalResultString.textContent = finalResult
 }
-
-
-  
-
-  /*
-  function game() {
-
-    let playerWins = 0
-    let computerWins = 0
-
-    // plays 5 rounds
-    for (let i = 0; i < 5; i++) {
-        let playerChoice = prompt("Rock, paper, scissors?")
-        let result = playRound(playerChoice, getComputerChoice())
-        console.log(result)
-
-        if (result.charAt(4) === "W") {
-            playerWins++
-        } else if (result.charAt(4) === "L") {
-            computerWins++
-        }
-    }
-
-    if (playerWins > computerWins) {
-        console.log("Final Winner: YOU!")
-    } else if (computerWins > playerWins) {
-        console.log("Final Winner: The Computer!")
-    } else {
-        console.log("Final Result: A draw!")
-    }
-  }
-
-  game()
-  */
